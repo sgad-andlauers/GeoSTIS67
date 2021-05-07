@@ -1,0 +1,25 @@
+[
+    {
+        "TableName":"Role"
+    },
+    {
+        "Id":1,
+        "label":"L1"
+    },
+    {
+        "Id": 2,
+        "label":"L2"
+    },
+    {
+        "Id":3,
+        "label":"L3"
+    },
+    {
+        "Id":4,
+        "label":"L4"
+    },
+    {
+        "Id":5,
+        "label":"l5"
+    }
+]

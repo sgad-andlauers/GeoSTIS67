@@ -1,0 +1,25 @@
+[
+    {
+        "TableName": "Champs"
+    },
+    {
+        "Id":1,
+        "Champ": "Nom",
+        "Id_app": 1
+    },
+    {
+        "Id":2,
+        "Champ": "Adresse",
+        "Id_app": 1
+    },
+    {
+        "Id":3,
+        "Champ": "Secteur",
+        "Id_app": 2
+    },
+    {
+        "Id":4,
+        "Champ": "Nombre personnel opperationnel",
+        "Id_app": 2
+    }
+]

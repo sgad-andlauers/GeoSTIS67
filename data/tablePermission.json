@@ -1,0 +1,45 @@
+[
+    {
+        "TableName": "Permission"
+    },
+    {
+        "Id": 1,
+        "Note": 0,
+        "code_name":"Pas de donnée"
+    },
+    {
+        "Id": 2,
+        "Note": 1,
+        "code_name":"Cargement de la donnée"
+    },
+    {
+        "Id": 3,
+        "Note": 2,
+        "code_name":"Lecture seul"
+    },
+    {
+        "Id": 4,
+        "Note": 4,
+        "code_name":"Donnée modifiable"
+    },
+    {
+        "Id": 5,
+        "Note": 8,
+        "code_name":"Creation de la donnée"
+    },
+    {
+        "Id": 6,
+        "Note": 16,
+        "code_name":"Suppression de la donnée"
+    },
+    {
+        "Id": 7,
+        "Note": 32,
+        "code_name":"Donnée importante"
+    },
+    {
+        "Id": 8,
+        "Note": 64,
+        "code_name":"Donnée requise"
+    }
+]

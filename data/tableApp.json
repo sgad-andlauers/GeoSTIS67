@@ -1,0 +1,13 @@
+[
+    {
+        "TableName": "Application"
+    },
+    {
+        "Id": 1,
+        "Name": "WebErp"
+    },
+    {
+        "Id": 2,
+        "Name":"POJ"
+    }
+]
