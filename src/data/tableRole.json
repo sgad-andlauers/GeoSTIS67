@@ -1,8 +1,5 @@
 [
     {
-        "TableName":"Role"
-    },
-    {
         "Id":1,
         "label":"L1"
     },
@@ -20,6 +17,6 @@
     },
     {
         "Id":5,
-        "label":"l5"
+        "label":"L5"
     }
 ]

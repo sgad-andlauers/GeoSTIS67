@@ -1,0 +1,14 @@
+[
+    {
+        "Id":1,
+        "label":"Responsable"
+    },
+    {
+        "Id": 2,
+        "label":"Gestionnaire"
+    },
+    {
+        "Id":3,
+        "label":"Membre"
+    }
+]

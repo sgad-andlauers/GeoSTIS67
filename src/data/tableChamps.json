@@ -1,8 +1,5 @@
 [
     {
-        "TableName": "Champs"
-    },
-    {
         "Id":1,
         "Champ": "Nom",
         "Id_app": 1

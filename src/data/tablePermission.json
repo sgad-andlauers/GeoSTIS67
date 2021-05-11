@@ -1,8 +1,5 @@
 [
     {
-        "TableName": "Permission"
-    },
-    {
         "Id": 1,
         "Note": 0,
         "code_name":"Pas de donnée"

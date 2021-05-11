@@ -1,8 +1,5 @@
 [
     {
-        "TableName": "Application"
-    },
-    {
         "Id": 1,
         "Name": "WebErp"
     },
