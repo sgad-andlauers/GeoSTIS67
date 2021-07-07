@@ -1,6 +1,8 @@
 import React , {useContext, forwardRef}from 'react';
 import { DataContext } from "../../../context/DataContext";
 import { makeStyles } from '@material-ui/core/styles';
+import {Button, ButtonGroup, Fab}from '@material-ui/core';
+import { Link } from "react-router-dom";
 import {
     AddBox,
     ArrowDownward,
@@ -16,9 +18,16 @@ import {
     Remove,
     SaveAlt,
     Search,
-    ViewColumn
+    ViewColumn,
+    CheckCircle,
+    Cancel,
+    Person,
+    MoreVert,
+    Add
   } from "@material-ui/icons";
+  import {BiReset} from "react-icons/bi"
 import MaterialTable, { MTableBodyRow } from "material-table";
+
 const useStyles = makeStyles((theme) => ({
   appBar: {
     position: 'relative',
@@ -29,11 +38,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const columns = [
-    { field: 'id', title: 'Id', width: 70 },
-    { field: 'Nom', title: 'Nom', width: 130 },
-    { field: 'Prenom', title: 'Prénom', width: 130 },
-  ];
   const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -60,10 +64,34 @@ const columns = [
 export default function DashBoard(props) {
     const classes = useStyles();
     const {dataUsers} = useContext(DataContext);
+    const GetParameters = () =>{
+      return (
+          <ButtonGroup color="primary" variant="text">
+            <Link to="/SettingsPassword" style={{ textDecoration: "none" }}>
+             <BiReset size = "24px"/>
+            </Link>
+            <Button>
+              <MoreVert/>
+            </Button>
+            <Link to="/SettingsProfils" style={{ textDecoration: "none" }}>
+             <Person/>
+            </Link>
+          </ButtonGroup>
+      )
+    }
+    
     return (
         <div> 
             <MaterialTable
-                columns={columns}
+                columns={[
+                  {field: 'id', title: 'Id', width: 70},
+                  {field: 'Nom', title: 'Nom', width: 130},
+                  {field: 'Prenom', title: 'Prénom', width: 130},
+                  {field: 'Email', title: 'Email',width: 130},
+                  {field: 'LastLogin', title:'Dernière connexion', width: 70},
+                  {field: 'Status', title:'Statut', width: 70, render: (rowData)=> {return rowData.Status ==="actif"?(<CheckCircle style={{ color: '#03DA03'}}/>):(<Cancel style={{color: '#EB0404'}}/>)}},
+                  {field:'Setup',title:'', width: 130, render: ()=> GetParameters()},
+                ]}
                 title="Liste des Utilisateurs"
                 icons={tableIcons}
                 data={dataUsers.default}
@@ -73,6 +101,12 @@ export default function DashBoard(props) {
                     }
                 }}
             />
+            <Link to="/AddProfils" style={{ textDecoration: "none" }}>
+              <Fab color="primary" aria-label="addProfils" style={{marginLeft:"90%", marginTop:"1%"}}>
+                <Add />
+              </Fab>
+            </Link>
         </div>
+        
     );
 }

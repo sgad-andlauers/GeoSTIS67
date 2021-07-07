@@ -2,31 +2,55 @@
     {
         "id": 1,
         "Nom":"Petit",
-        "Prenom":"Patrice"
+        "Prenom":"Patrice",
+        "Email":"patrice.petit@sdis67.com",
+        "LastLogin":"21-06-2021",
+        "Status":"actif",
+        "fonction": "Responsable"
     },
     {
         "id": 2,
         "Nom":"Dupin",
-        "Prenom":"Maxime"
+        "Prenom":"Maxime",
+        "Email":"maxime.dupin@sdis67.com",
+        "LastLogin":"21-06-2021",
+        "Status":"actif",
+        "fonction": "Responsable"
     },
     {
         "id":3,
         "Nom":"Huck",
-        "Prenom":"Alain"
+        "Prenom":"Alain",
+        "Email":"alain.huck@sdis67.com",
+        "LastLogin":"21-06-2021",
+        "Status":"actif",
+        "fonction": "Gestionnaire"
     },
     {
         "id":4,
         "Nom":"Colobert",
-        "Prenom":"Mathieu"
+        "Prenom":"Mathieu",
+        "Email":"mathieu.colobert@sdis67.com",
+        "LastLogin":"21-06-2021",
+        "Status":"inactif",
+        "fonction": "Gestionnaire"
     },
     {
         "id":5,
         "Nom":"Ratelli",
-        "Prenom":"Luc"
+        "Prenom":"Luc",
+        "Email":"luc.ratelli@sdis67.com",
+        "LastLogin":"21-06-2021",
+        "Status":"actif",
+        "fonction": "Membre"
     },
     {
         "id":6,
         "Nom":"Andlauer",
-        "Prenom":"Sébastien"
+        "Prenom":"Sébastien",
+        "Email":"sebastien.andlauer@sdis67.com",
+        "LastLogin":"21-06-2021",
+        "Status":"actif",
+        "fonction": "Membre"
     }
 ]

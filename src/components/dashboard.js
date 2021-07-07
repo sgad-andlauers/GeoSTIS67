@@ -19,6 +19,9 @@ import Accueil from "./Templates/Accueil";
 import UserTemplate from "./Templates/Utilisateur/UserTemplate";
 import RoleTemplate from "./Templates/Rôle/roleTemplate";
 import AppTemplate from "./Templates/App/appTemplate";
+import GroupTemplate from "./Templates/Groupe/GroupTemplate";
+import AddGroups from "./Templates/Groupe/AddGroup";
+import CreateRoleTemplates from "./Templates/Rôle/createRoleTemplate";
 
 const drawerWidth = 240;
 
@@ -168,6 +171,7 @@ export default function Dashboard() {
                       <RoleTemplate/>
                     </Route>
                     <Route exact path="/Groupes">
+                      <GroupTemplate/>
                     </Route>
                     <Route exact path="/Applications">
                       <AppTemplate/>
@@ -177,6 +181,18 @@ export default function Dashboard() {
                     <Route exact path="/Tableau_de_bord">
                     </Route>
                     <Route exact path="/Parametres">
+                    </Route>
+                    <Route exact path="/AddProfils">
+                    </Route>
+                    <Route exact path="/SettingsProfils">
+                    </Route>
+                    <Route exact path="/SettingsPassword">
+                    </Route>
+                    <Route exact path="/AddGroups">
+                      <AddGroups/> 
+                    </Route>
+                    <Route exact path="/createRoles">
+                      <CreateRoleTemplates/> 
                     </Route>
                   </Switch>
                 </Paper>

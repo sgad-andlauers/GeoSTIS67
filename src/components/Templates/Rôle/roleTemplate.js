@@ -1,6 +1,6 @@
-import React , {useContext, forwardRef, useState} from 'react';
+import React , {useContext, forwardRef} from 'react';
 import { DataContext } from "../../../context/DataContext";
-import { makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import {
     AddBox,
     ArrowDownward,
@@ -16,10 +16,12 @@ import {
     Remove,
     SaveAlt,
     Search,
-    ViewColumn
+    ViewColumn, 
   } from "@material-ui/icons";
-import MaterialTable, { MTableBodyRow } from "material-table";
-import ModificateRoleTemplate from "./modificateRoleTemplate";
+import {MdEdit} from "react-icons/md"
+import MaterialTable, { MTableBodyRow } from "material-table"; 
+import { Link } from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
 
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const columns = [
-    { field: 'Id', title: 'Id', width: 70 },
+    { field: 'id', title: 'Id', width: 70 },
     { field: 'label', title: 'Role', width: 130 },
   ];
   const tableIcons = {
@@ -61,18 +63,9 @@ const columns = [
   };
 export default function RoleTemplate(props) {
     const classes = useStyles();
-    const {dataRole} = useContext(DataContext);
-    const [selectedRow, setSelectedRow] = useState(null);
-    const [open, setOpen] = useState(false);
-    const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down("ml"));
-
-    const handleClose = () => {
-      setOpen(false);
-    };
+    const {Roles, setSelectedRow} = useContext(DataContext);
     const handleClickOpenDialog = (evt, selectedRow) => {
         setSelectedRow(selectedRow);
-        setOpen(true);
       };
     return (
         <div> 
@@ -80,24 +73,23 @@ export default function RoleTemplate(props) {
                 columns={columns}
                 title="Liste des Rôles"
                 icons={tableIcons}
-                data={dataRole.default}
+                data={Roles}
                 components={{
                     Row: (props) => {
-                    return <MTableBodyRow {...props} className={classes.row} />;
+                    return (
+                        <MTableBodyRow {...props} className={classes.row}/>
+                    )
                     }
                 }}
-                onRowClick={(evt, selectedRow) =>
+                actions={[
+                  rowData => ({
+                    icon: () => <Link to="/createRoles" style={{ textDecoration: "none" }}><MdEdit size="24px"/></Link>,
+                    tooltip: 'Edit ',
+                    onClick: (evt, selectedRow) =>
                     handleClickOpenDialog(evt, selectedRow)
-                  }
+                  })
+                ]}
             />
-            {selectedRow && (
-                <ModificateRoleTemplate
-                selectedRow={selectedRow}
-                open={open}
-                onClickClose={handleClose}
-                fullScreen={fullScreen}
-                />
-            )}
         </div>
     );
 }
