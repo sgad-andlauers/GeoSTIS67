@@ -168,17 +168,6 @@ export const Groupes = [
         subgroup:[4, 5, 6, 7]
     },
     {
-        id: 8,
-        nom: "PCUO",
-        nature: "Groupe",
-        zone: 2,
-        parentId: 2,
-        fonction:"",
-        membre: 15,
-        level: 5,
-        subgroup:[4, 5, 6, 7]
-    },
-    {
         id: 4,
         nom: "CTA-CDIS",
         nature: "Unité organisationnel",
@@ -224,3 +213,60 @@ export const Groupes = [
     },
    
 ];
+export const Users = 
+[
+    {
+        id: 1,
+        nom:"Petit",
+        prenom:"Patrice",
+        email:"patrice.petit@sdis67.com",
+        lastLogin:"21-06-2021",
+        status:"actif",
+        fonction: 1
+    },
+    {
+        id: 2,
+        nom:"Dupin",
+        prenom:"Maxime",
+        email:"maxime.dupin@sdis67.com",
+        lastLogin:"21-06-2021",
+        status:"actif",
+        fonction: 1
+    },
+    {
+        id:3,
+        nom:"Huck",
+        prenom:"Alain",
+        email:"alain.huck@sdis67.com",
+        lastLogin:"21-06-2021",
+        status:"actif",
+        fonction: 2
+    },
+    {
+        id:4,
+        nom:"Colobert",
+        prenom:"Mathieu",
+        email:"mathieu.colobert@sdis67.com",
+        lastLogin:"21-06-2021",
+        status:"inactif",
+        fonction: 2
+    },
+    {
+        id:5,
+        nom:"Ratelli",
+        prenom:"Luc",
+        email:"luc.ratelli@sdis67.com",
+        lastLogin:"21-06-2021",
+        status:"actif",
+        fonction: 3
+    },
+    {
+        id:6,
+        nom:"Andlauer",
+        prenom:"Sébastien",
+        email:"sebastien.andlauer@sdis67.com",
+        lastLogin:"21-06-2021",
+        status:"actif",
+        fonction: 3
+    }
+]

@@ -1,11 +1,9 @@
 import React, {createContext, useState, useEffect } from "react";
 import axios from "axios";
-import * as dataUsers from '../data/tableUser.json';
-import * as dataChamps from '../data/tableChamps.json';
-import {Permissions, Roles, Fonctions, Cie, Champs, Groupes} from "../data/Model";
+import {Permissions, Roles, Fonctions, Cie, Champs, Groupes, Users} from "../data/Model";
 
 export const DataContext = createContext();
-const token = "d38d2c5ca7b3ec88108834dc5ca28d3cb72cb765689c20194e3430f839fe8158";
+const token = "aff8a1661e848960201c637d321b86d9278926580b4cdcc7affd019a9b9605b0";
 const Api = {
   apiDataApp : "https://dev.geo.sdis67.com/api/v1/app/",
   apiDataCommune : "https://dev.geo.sdis67.com/api/v1/app/erp/communes",
@@ -19,6 +17,7 @@ export default function DataContextProvider(props) {
   const [dataGroupe, setDataGroupe] = useState([]);
   const [permissionsDjango, setPermissinsDjango] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [getCodeName, setGetCodeName] = useState(null);
 
   /** ---------------------------- questionnement de l'api --------------------------------- */
                     /** ----------------- Api App --------------- */
@@ -32,6 +31,16 @@ export default function DataContextProvider(props) {
     console.log("getApiApp");
     getAPIDataApp();
   }, []);
+  const code_name =(array)=>{
+    let codeName=[];
+    array && array.map((d)=>{
+      codeName.push(d.codeName);
+      return setGetCodeName(codeName)
+    });
+  }
+  useEffect(() => {
+    code_name(dataApp);
+  }, [dataApp]);
                     /** ----------------- Api communes ---------- */
   const getAPIDataCommune = async () => {
     const res = await axios.get(Api.apiDataCommune);
@@ -61,13 +70,13 @@ export default function DataContextProvider(props) {
         Cie,
         Champs,
         Groupes,
+        Users,
         dataApp,
         tableCommune,
-        dataUsers,
-        dataChamps,
         dataGroupe,
         permissionsDjango,
         selectedRow,
+        getCodeName,
         setSelectedRow,
         setDataGroupe
 

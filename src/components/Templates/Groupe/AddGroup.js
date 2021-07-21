@@ -1,4 +1,4 @@
-import React, {useState, useContext,forwardRef}  from 'react';
+import React, {useState, useContext,forwardRef, useMemo}  from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -20,6 +20,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Accordion from '@material-ui/core/Accordion';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import _ from 'lodash';
 import {
   AddBox,
   ArrowDownward,
@@ -38,7 +39,7 @@ import {
   ViewColumn
 } from "@material-ui/icons";
 import MaterialTable, { MTableBodyRow } from "material-table";
-
+ 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -86,18 +87,66 @@ function getSteps() {
 }
 
 function GetStepContent(stepIndex) {
+  /**------------------ set state --------------------*/
   const classes = useStyles();
   const [checkGroupLeader, setCheckGroupLeader] = useState(false);
-  const {Cie, dataApp, tableCommune, dataGroupe, Roles, Groupes} = useContext(DataContext);
-  const [getZone, setGetZone] = useState(null);
+  const {Cie, dataApp, tableCommune, dataGroupe, Roles, Groupes, Users, Fonctions, getCodeName} = useContext(DataContext);
+  const [value, setValue] = useState(0); 
+
+  const [getZone, setGetZone] = useState('');
+  const [getNature, setGetNature] = useState('');
+  const [getRole, setGetRole] = useState([{
+    id_role:null,
+    id_app:null,
+  }]);
+  const [getFonctions, setGetFonctions] = useState([
+    {id_fonction:null,
+      role:getRole
+    }]);
   const [choixZone, setChoixZone] = useState([]);
-  const [responsable, setResponsable] = useState('');
-  const [gestionnaire, setGestionnaire] = useState('');
-  const [membre, setMembre] = useState('');
-  //const [checkGroupeParents, setCheckGroupeParents] = useState({})
+  const [getUserInGroup, setUserInGroup]= useState([{
+    id_user:null,
+    id_fonction:null
+  }]);
+  const [saveAddGroup, setSaveAddGroup] = useState({
+    nom:" cs Altorf",
+    description:"",
+    groupeParent:2,
+    nature:getNature,
+    zone:null,
+    fonction:getFonctions,
+    user:getUserInGroup
+  });
+  const useForceUpdate = function() {
+    setValue((value) => value + 1); // update the state to force render
+  }
+  /**---------------- function for first step ------------------*/
   const handleChange = (event) => {
     setCheckGroupLeader(event.target.checked);
   };
+  /**---------------- function for second step ---------------- */
+  const handleChangeCodeName = (d) => {
+
+    d.checked = !d.checked 
+    console.log(d, dataApp)
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useForceUpdate();
+ 
+  };
+  const handleCheckCodeName = (d) => {
+    d.checked = !d.checked;
+    console.log(d, dataApp)
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useForceUpdate();
+  };
+
+  const isChecked = (d) => {
+    return d.checked;
+  };
+
+
+  /**---------------- function for third step ---------------*/
   const handleChangeZone = (e)=>{
     setGetZone(e.target.value);
     if (e.target.value === "Cie"){
@@ -106,95 +155,42 @@ function GetStepContent(stepIndex) {
       setChoixZone(tableCommune);
     }
   }; 
-  const isChecked = (d)=>{
-    //setCheckGroupLeader({...checkGroupeParents, name:d.titre})
-    return d.checked;
-  }
-  const handleCheckGroupeParent = (e, d)=>{
-  /*if(checkGroupeParents.name === e.target.name){
-    setCheckGroupeParents({...checkGroupeParents, titre: e.target.checked})
-  }*/
-  d.checked =! d.checked;
+  /**---------------- function for four step --------------- */
+  const convertArrayToObject = (array, key) => {
+    const initialValue = {};
+    return array.reduce((obj, item) => {
+      return {
+        ...obj,
+        [item[key]]: item.label,
+      };
+    }, initialValue);
   };
-  const handleChangeResponsable = (event) => {
-    setResponsable(event.target.value);
-  };
-  const getLevelResponsable = () => {
-    
-    Roles && Roles.map((d)=>{
-      return(
-        <>
-          <Select
-              labelId="Role-Select-Groupe"
-              id="Role-Select-Groupe"
-              value={responsable}
-              onChange={handleChangeResponsable}
-              label="Age"
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={d.label}>{d.label}</MenuItem>
-          </Select>
-        </>
-      )
-    })
-  };
-  const handleChangeGestionnaire = (event) => {
-    setGestionnaire(event.target.value);
-  };
-  const getLevelGestionnaire = () => {
-    
-      Roles && Roles.map((d)=>{
-        return(
-          <>
-          <Select
-              labelId="Role-Select-Groupe"
-              id="Role-Select-Groupe"
-              value={gestionnaire}
-              onChange={handleChangeGestionnaire}
-              label="Age"
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={d.label}>{d.label}</MenuItem>
-            </Select>
-          </>
-        )
-      })
-    };
-    const handleChangeMembre = (event) => {
-      setMembre(event.target.value);
-    };
-  const getLevelMembre = () => {
-   
-      Roles && Roles.map((d)=>{
-      return(
-        <>
-         <Select
-            labelId="Role-Select-Groupe"
-            id="Role-Select-Groupe"
-            value={membre}
-            onChange={handleChangeMembre}
-            label="Age"
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={d.label}>{d.label}</MenuItem>
-          </Select>
-        </>
-        )
-      })
-    };
+  const lookup = convertArrayToObject(Fonctions,'id');
+
   switch (stepIndex) {
     case 0:
       return (
           <Container maxWidth="sm">
             <form  noValidate autoComplete="off">
-                <TextField id="name" label="Nom du groupe" variant="outlined" fullWidth/>
-                <TextField id="Descriptif" label="Description" multiline fullWidth variant="outlined" style={{marginTop:"2%"}}/>
+                <TextField id="name" label="Nom du groupe" variant="outlined" name="name" fullWidth/>
+                <TextField id="Descriptif" label="Description" multiline name="description" fullWidth variant="outlined" style={{marginTop:"2%"}}/>
+                <Select
+                labelId="SelectNature"
+                id="SelectNature"
+                value={getNature}
+                onChange={handleChangeZone}
+                label="Nature"
+                placeholder="Nature du groupe"
+                fullWidth
+                variant="outlined"
+                style={{marginTop:"2%"}}
+            >
+                <MenuItem value={null}>
+                    <em>None</em>
+                </MenuItem>
+                <MenuItem value={"UO"}>Unité organisationnelle</MenuItem>
+                <MenuItem value={"groupe"}>Groupe</MenuItem>
+            </Select>
                 <Grid container spacing={3}>
                     <Grid>
                         <Checkbox
@@ -207,7 +203,8 @@ function GetStepContent(stepIndex) {
                         <Autocomplete
                             disabled={!checkGroupLeader}
                             id="GroupLeader"
-                            options={dataGroupe}
+                            options={Groupes}
+                            name="groupeParent"
                             getOptionLabel={(option) => option.nom}
                             style={{ width: 520, marginTop: "6%" }}
                             renderInput={(params) => 
@@ -224,59 +221,93 @@ function GetStepContent(stepIndex) {
           {dataApp && dataApp.map((d)=>{
             return (
               <Box key={d.id}>
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="permission-panel"
-                    id={d.id}
-                  >
-                    <Typography className={classes.heading}>{d.titre}</Typography>
-                    <Typography style={{marginLeft:"20%", marginTop:"2%"}} variant="caption">
-                      héritage du groupe parent
-                    </Typography>
-                    <FormControlLabel 
-                      style={{marginTop:"1%", marginLeft:"5%"}}
-                      control={<Switch checked={isChecked(d)} onClick={(e)=>{handleCheckGroupeParent(e, d)}} name={d.titre} />}
-                    />
-                  </AccordionSummary>
-                  <AccordionDetails>
-                  <MaterialTable
-                      columns={[
-                        {
-                          title: "Niveau",
-                          field: "nom",
-                        },
-                        {
-                          title: "Responsable",
-                          field: "fonction",
-                          render: (rowData) => getLevelResponsable(rowData)
-                        },
-                        {
-                          title: "Gestionnaire",
-                          field: "fonction",
-                          render: (rowData) => getLevelGestionnaire(rowData)
-                        },
-                        {
-                          title: "Membre",
-                          field: "fonction",
-                          render: (rowData) => getLevelMembre(rowData)
-                        },
-                      ]
-                      }
-                      title=""
-                      icons={tableIcons}
-                      data={Groupes}
-                      parentChildData={(row, rows) => rows.find(a => {
-                        console.log(a, row, row.subgroup.con)
-                        return a.subgroup.includes(row.id)})}
-                      components={{
-                          Row: (props) => {
-                          return <MTableBodyRow {...props} className={classes.row} />;
-                          }
-                      }}
-                    />
-                  </AccordionDetails>
-                </Accordion>
+                <Grid container spacing={3}>
+                  <Grid item xs={2}>
+                  <Checkbox  checked={isChecked(d)} onClick={() => {handleChangeCodeName(d)}} name={d.codeName} />
+                  </Grid>
+                  <Grid item xs={10} >
+                      <Accordion disabled ={d.checked && d.checked === true ? false : true}>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="permission-panel"
+                        id={d.id}
+                      >
+                        <Typography className={classes.heading}>{d.titre}</Typography>
+                        <Typography style={{marginLeft:"20%", marginTop:"2%"}} variant="caption">
+                          héritage du groupe parent
+                        </Typography>
+                        <FormControlLabel 
+                          style={{marginTop:"1%", marginLeft:"5%"}}
+                          control={<Switch disabled={!checkGroupLeader} checked={isChecked(d)} onClick={(e)=>{handleCheckCodeName(e, d)}} name={d.titre} />}
+                        />
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        {saveAddGroup && saveAddGroup.groupeParent === null ?(
+                          <>
+                            <Grid container >
+                              <Grid item xs={12}>
+                                  {Fonctions && Fonctions.map((data)=>{return(
+                                    <>
+                                      <Typography variant="caption" style={{marginLeft:"20%" }}>{data.label}</Typography>
+                                    </>
+                                  )})}
+                                </Grid>
+                              <Grid item xs={3}>
+                                <Typography variant="caption">{saveAddGroup.nom}</Typography>
+                              </Grid>
+                              {Fonctions && Fonctions.map((data)=>{return(
+                                <Grid item xs={3} >
+                                  <Autocomplete
+                                      id="permissionGroup"
+                                      options={Roles}
+                                      name="permissionGroup"
+                                      style={{width:"40%", marginLeft:"20%"}}
+                                      getOptionLabel={(option) => option.label}
+                                      renderInput={(params) => 
+                                      <TextField {...params} label="Rôles" variant="outlined" />}
+                                  />
+                                </Grid>
+                              )})}
+                             
+                            </Grid>
+                          </>
+                        ):(
+                          <>
+                          <Grid container >
+                            <Grid item xs={12}>
+                                {Fonctions && Fonctions.map((data)=>{return(
+                                  <>
+                                    <Typography variant="caption" style={{marginLeft:"20%" }}>{data.label}</Typography>
+                                  </>
+                                )})}
+                              </Grid>
+                              
+                                  <Grid item xs={3}>
+                                    <Typography variant="caption">{saveAddGroup.nom}</Typography>
+                                  </Grid>
+                                  {Fonctions && Fonctions.map((data)=>{return(
+                                    <Grid item xs={3} >
+                                      <Autocomplete
+                                          id="permissionGroup"
+                                          options={Roles}
+                                          name="permissionGroup"
+                                          style={{width:"40%", marginLeft:"20%"}}
+                                          getOptionLabel={(option) => option.label}
+                                          renderInput={(params) => 
+                                          <TextField {...params} label="Rôles" variant="outlined" />}
+                                      />
+                                    </Grid>
+                                  )})}
+                             
+                          </Grid>
+                          
+                        </>
+                        )}
+                      </AccordionDetails>
+                    </Accordion>
+                  </Grid>
+                </Grid>
+                
               </Box>
             )   
           })}
@@ -320,7 +351,40 @@ function GetStepContent(stepIndex) {
     </Container>
       );
       case 3:
-        return "add membres"
+        return ( <MaterialTable
+          columns={[
+            {
+              title: "Nom",
+              field: "nom",
+              editable: 'never'
+            },
+            {
+              title: "Email",
+              field: "email",
+              editable: 'never'
+            },
+            {
+              title: "fonction",
+              field: "fonction",
+              lookup:lookup
+            }
+          ]}
+          title=""
+          icons={tableIcons}
+          data={Users}
+          cellEditable={{
+            onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
+              return new Promise((resolve, reject) => {
+                console.log('newValue: ' + newValue);
+                setTimeout(resolve, 1000);
+              });
+            }
+          }}
+          options={{
+            selection: true
+          }}
+        />
+        )
     default:
       return 'Unknown stepIndex';
   }
