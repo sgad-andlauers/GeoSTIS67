@@ -3,7 +3,7 @@ import axios from "axios";
 import {Permissions, Roles, Fonctions, Cie, Champs, Groupes, Users} from "../data/Model";
 
 export const DataContext = createContext();
-const token = "aff8a1661e848960201c637d321b86d9278926580b4cdcc7affd019a9b9605b0";
+const token = "8db091b6a212501bedc12d17110779557b02cc2d835082ebe7d80056aad562c2";
 const Api = {
   apiDataApp : "https://dev.geo.sdis67.com/api/v1/app/",
   apiDataCommune : "https://dev.geo.sdis67.com/api/v1/app/erp/communes",

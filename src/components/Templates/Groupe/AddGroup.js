@@ -92,7 +92,7 @@ function GetStepContent(stepIndex) {
   const [checkGroupLeader, setCheckGroupLeader] = useState(false);
   const {Cie, dataApp, tableCommune, dataGroupe, Roles, Groupes, Users, Fonctions, getCodeName} = useContext(DataContext);
   const [value, setValue] = useState(0); 
-
+  const [choixZone, setChoixZone] = useState([]);
   const [getZone, setGetZone] = useState('');
   const [getNature, setGetNature] = useState('');
   const [getRole, setGetRole] = useState([{
@@ -102,16 +102,16 @@ function GetStepContent(stepIndex) {
   const [getFonctions, setGetFonctions] = useState([
     {id_fonction:null,
       role:getRole
-    }]);
-  const [choixZone, setChoixZone] = useState([]);
+    }
+  ]);
   const [getUserInGroup, setUserInGroup]= useState([{
     id_user:null,
     id_fonction:null
   }]);
   const [saveAddGroup, setSaveAddGroup] = useState({
-    nom:" cs Altorf",
+    nom:" cis Altorf",
     description:"",
-    groupeParent:2,
+    parentId:6,
     nature:getNature,
     zone:null,
     fonction:getFonctions,
@@ -119,6 +119,92 @@ function GetStepContent(stepIndex) {
   });
   const useForceUpdate = function() {
     setValue((value) => value + 1); // update the state to force render
+  };
+  const groupStatics = function(id, niveau){
+    let diferentLevel = Groupes.filter(d => d.id === id);
+    let marginLeft = 1 * niveau;
+    console.warn("diferentLevel", diferentLevel);
+    return(
+      <>
+      <Grid item xs={3}style={{marginTop:"2%"}}>
+        <Typography variant="caption">{saveAddGroup.nom}</Typography>
+      </Grid>
+      <Grid item xs={3} >
+        <Autocomplete
+          id={`Responsable${niveau}`}
+          options={Roles}
+          name="permissionGroupResponsable"
+          style={{width:"40%", marginLeft:"82%"}}
+          getOptionLabel={(option) => option.label}
+          renderInput={(params) => 
+              <TextField {...params} label="Rôles" variant="outlined" />}
+        />
+      </Grid>
+      <Grid item xs={3} >
+        <Autocomplete
+          id={`Gestionnaire${niveau}`}
+          options={Roles}
+          name="permissionGroupGestionnaire"
+          style={{width:"40%", marginLeft:"42%"}}
+          getOptionLabel={(option) => option.label}
+          renderInput={(params) => 
+            <TextField {...params} label="Rôles" variant="outlined" />}
+        />
+      </Grid>
+      <Grid item xs={3} >
+        <Autocomplete
+          id={`Membres${niveau}`}
+          options={Roles}
+          name="permissionGroupMembre"
+          style={{width:"40%"}}
+          getOptionLabel={(option) => option.label}
+          renderInput={(params) => 
+            <TextField {...params} label="Rôles" variant="outlined" />}
+        />
+      </Grid>
+      {diferentLevel && diferentLevel.map((d)=>{return(
+        <>
+          <Grid item xs={3}style={{marginTop:"2%", marginLeft:`${marginLeft}%`}}>
+            <Typography variant="caption">{d.nom}</Typography>
+          </Grid>
+          <Grid item xs={3} >
+            <Autocomplete
+              id={`Responsable${niveau+1}`}
+              options={Roles}
+              name="permissionGroupResponsable"
+              style={{width:"40%", marginLeft:"82%", marginTop:"2%"}}
+              getOptionLabel={(option) => option.label}
+              renderInput={(params) => 
+                  <TextField {...params} label="Rôles" variant="outlined" />}
+            />
+          </Grid>
+          <Grid item xs={3} >
+            <Autocomplete
+              id={`Gestionnaire${niveau+1}`}
+              options={Roles}
+              name="permissionGroupGestionnaire"
+              style={{width:"40%", marginLeft:"42%", marginTop:"2%"}}
+              getOptionLabel={(option) => option.label}
+              renderInput={(params) => 
+                <TextField {...params} label="Rôles" variant="outlined" />}
+            />
+          </Grid>
+          <Grid item xs={3} >
+            <Autocomplete
+              id={`Membres${niveau+1}`}
+              options={Roles}
+              name="permissionGroupMembre"
+              style={{width:"40%", marginTop:"2%"}}
+              getOptionLabel={(option) => option.label}
+              renderInput={(params) => 
+                <TextField {...params} label="Rôles" variant="outlined" />}
+            />
+          </Grid>
+      </>
+      )})}
+      </>
+    )
+    
   }
   /**---------------- function for first step ------------------*/
   const handleChange = (event) => {
@@ -126,17 +212,14 @@ function GetStepContent(stepIndex) {
   };
   /**---------------- function for second step ---------------- */
   const handleChangeCodeName = (d) => {
-
     d.checked = !d.checked 
-    console.log(d, dataApp)
-
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useForceUpdate();
  
   };
+
   const handleCheckCodeName = (d) => {
     d.checked = !d.checked;
-    console.log(d, dataApp)
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useForceUpdate();
   };
@@ -204,7 +287,7 @@ function GetStepContent(stepIndex) {
                             disabled={!checkGroupLeader}
                             id="GroupLeader"
                             options={Groupes}
-                            name="groupeParent"
+                            name="parentId"
                             getOptionLabel={(option) => option.nom}
                             style={{ width: 520, marginTop: "6%" }}
                             renderInput={(params) => 
@@ -226,7 +309,7 @@ function GetStepContent(stepIndex) {
                   <Checkbox  checked={isChecked(d)} onClick={() => {handleChangeCodeName(d)}} name={d.codeName} />
                   </Grid>
                   <Grid item xs={10} >
-                      <Accordion disabled ={d.checked && d.checked === true ? false : true}>
+                      <Accordion disabled ={d.checked && d.checked === true ? false : true} >
                       <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="permission-panel"
@@ -238,70 +321,73 @@ function GetStepContent(stepIndex) {
                         </Typography>
                         <FormControlLabel 
                           style={{marginTop:"1%", marginLeft:"5%"}}
-                          control={<Switch disabled={!checkGroupLeader} checked={isChecked(d)} onClick={(e)=>{handleCheckCodeName(e, d)}} name={d.titre} />}
+                          control={<Switch disabled={!checkGroupLeader} name={d.titre} />}//onCheck event event.preventDefault
                         />
                       </AccordionSummary>
                       <AccordionDetails>
-                        {saveAddGroup && saveAddGroup.groupeParent === null ?(
+                        {saveAddGroup && saveAddGroup.parentId === null ?(
                           <>
                             <Grid container >
                               <Grid item xs={12}>
                                   {Fonctions && Fonctions.map((data)=>{return(
                                     <>
-                                      <Typography variant="caption" style={{marginLeft:"20%" }}>{data.label}</Typography>
+                                      <Typography variant="caption" style={{marginLeft:"0%" }}>{data.label}</Typography>
                                     </>
                                   )})}
-                                </Grid>
+                              </Grid>
                               <Grid item xs={3}>
                                 <Typography variant="caption">{saveAddGroup.nom}</Typography>
                               </Grid>
-                              {Fonctions && Fonctions.map((data)=>{return(
                                 <Grid item xs={3} >
                                   <Autocomplete
-                                      id="permissionGroup"
+                                      id={d.id}
                                       options={Roles}
-                                      name="permissionGroup"
-                                      style={{width:"40%", marginLeft:"20%"}}
+                                      name="permissionGroupResponsable"
+                                      style={{width:"40%", marginLeft:"5%"}}
                                       getOptionLabel={(option) => option.label}
                                       renderInput={(params) => 
                                       <TextField {...params} label="Rôles" variant="outlined" />}
                                   />
                                 </Grid>
-                              )})}
-                             
+                                <Grid item xs={3} >
+                                  <Autocomplete
+                                      id={d.id}
+                                      options={Roles}
+                                      name="permissionGroupGestionnaire"
+                                      style={{width:"40%", marginLeft:"27%"}}
+                                      getOptionLabel={(option) => option.label}
+                                      renderInput={(params) => 
+                                      <TextField {...params} label="Rôles" variant="outlined" />}
+                                  />
+                                </Grid>
+                                <Grid item xs={3} >
+                                  <Autocomplete
+                                      id={d.id}
+                                      options={Roles}
+                                      name="permissionGroupMembre"
+                                      style={{width:"40%", marginLeft:"40%"}}
+                                      getOptionLabel={(option) => option.label}
+                                      renderInput={(params) => 
+                                      <TextField {...params} label="Rôles" variant="outlined" />}
+                                  />
+                                </Grid>
                             </Grid>
                           </>
                         ):(
                           <>
-                          <Grid container >
-                            <Grid item xs={12}>
-                                {Fonctions && Fonctions.map((data)=>{return(
-                                  <>
-                                    <Typography variant="caption" style={{marginLeft:"20%" }}>{data.label}</Typography>
-                                  </>
-                                )})}
-                              </Grid>
-                              
-                                  <Grid item xs={3}>
-                                    <Typography variant="caption">{saveAddGroup.nom}</Typography>
-                                  </Grid>
+                            <Grid container >
+                              <Grid item xs={12}style={{marginLeft:"22%" }}>
                                   {Fonctions && Fonctions.map((data)=>{return(
-                                    <Grid item xs={3} >
-                                      <Autocomplete
-                                          id="permissionGroup"
-                                          options={Roles}
-                                          name="permissionGroup"
-                                          style={{width:"40%", marginLeft:"20%"}}
-                                          getOptionLabel={(option) => option.label}
-                                          renderInput={(params) => 
-                                          <TextField {...params} label="Rôles" variant="outlined" />}
-                                      />
-                                    </Grid>
+                                    <>
+                                      <Typography variant="caption" style={{marginLeft:"8%" }}>{data.label}</Typography>
+                                    </>
                                   )})}
-                             
-                          </Grid>
-                          
-                        </>
+                                </Grid>
+                                {groupStatics(saveAddGroup.parentId, 1)}
+                              
+                                
+                            </Grid>
+                          </>
                         )}
                       </AccordionDetails>
                     </Accordion>

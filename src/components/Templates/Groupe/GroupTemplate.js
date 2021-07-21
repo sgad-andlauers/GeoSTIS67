@@ -60,7 +60,6 @@ const useStyles = makeStyles((theme) => ({
 export default function GroupTemplate(props) {
     const classes = useStyles();
     const {Groupes}= useContext(DataContext);
-    console.warn("groupList", Groupes)
 
     const GetParameters = () => {};
     return (
