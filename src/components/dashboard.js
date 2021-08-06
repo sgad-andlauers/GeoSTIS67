@@ -12,9 +12,8 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import {mainListItems} from "./listItem";
+import {menuListItems} from "./listItem";
 import Accueil from "./Templates/Accueil";
 import UserTemplate from "./Templates/Utilisateur/UserTemplate";
 import RoleTemplate from "./Templates/Rôle/roleTemplate";
@@ -22,75 +21,20 @@ import AppTemplate from "./Templates/App/appTemplate";
 import GroupTemplate from "./Templates/Groupe/GroupTemplate";
 import AddGroups from "./Templates/Groupe/AddGroup";
 import CreateRoleTemplates from "./Templates/Rôle/createRoleTemplate";
+import AddProfils from "./Templates/Utilisateur/AddProfils";
+import SettingsProfils from "./Templates/Utilisateur/SettingsProfils";
 
-const drawerWidth = 240;
+const drawerWidth = 340;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex"
   },
-  toolbar: {
-    paddingRight: 24 // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  menuButton: {
-    marginRight: 36
-  },
-  menuButtonHidden: {
-    display: "none"
-  },
   title: {
     flexGrow: 1
   },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9)
-    }
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: "100vh",
-    overflow: "auto"
-  },
   container: {
-    paddingTop: theme.spacing(4),
+    paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(4)
   },
   paper: {
@@ -99,9 +43,23 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
     flexDirection: "column"
   },
-  fixedHeight: {
-    height: 80
-  }
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerContainer: {
+    overflow: 'auto',
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
 }));
 
 export default function Dashboard() {
@@ -122,7 +80,7 @@ export default function Dashboard() {
           position="absolute"
           className={clsx(classes.appBar, open && classes.appBarShift)}
         >
-          <Toolbar className={classes.toolbar}>
+          <Toolbar >
             <IconButton
               edge="start"
               color="inherit"
@@ -138,21 +96,19 @@ export default function Dashboard() {
           </Toolbar>
         </AppBar>
         <Drawer
-          variant="permanent"
-          classes={{
-            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
-          }}
-          open={open}
-        >
-          <div className={classes.toolbarIcon}>
-            <IconButton onClick={handleDrawerClose}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </div>
+        className={classes.drawer}
+        variant="permanent"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <Toolbar />
+        <div className={classes.drawerContainer}>
           <Divider />
-          <List>{mainListItems}</List>
+          <List>{menuListItems}</List>
           <Divider />
-        </Drawer>
+        </div>
+      </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
@@ -167,6 +123,10 @@ export default function Dashboard() {
                     <Route exact path="/Utilisateurs">
                       <UserTemplate/>
                     </Route>
+                    <Route exact path="/SettingsProfils">
+                    <SettingsProfils />
+                </Route>
+                <Route exact path="/SettingsPassword"></Route>
                     <Route exact path="/Roles">
                       <RoleTemplate/>
                     </Route>
@@ -183,10 +143,7 @@ export default function Dashboard() {
                     <Route exact path="/Parametres">
                     </Route>
                     <Route exact path="/AddProfils">
-                    </Route>
-                    <Route exact path="/SettingsProfils">
-                    </Route>
-                    <Route exact path="/SettingsPassword">
+                      <AddProfils/>
                     </Route>
                     <Route exact path="/AddGroups">
                       <AddGroups/> 

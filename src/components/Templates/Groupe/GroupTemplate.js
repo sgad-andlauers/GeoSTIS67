@@ -18,8 +18,10 @@ import {
   Remove,
   SaveAlt,
   Search,
-  ViewColumn
+  ViewColumn,
+ 
 } from "@material-ui/icons";
+import {ButtonGroup, Button}from '@material-ui/core';
 import MaterialTable, { MTableBodyRow } from "material-table";
 import {MdAdd } from "react-icons/md";
 
@@ -61,13 +63,24 @@ export default function GroupTemplate(props) {
     const classes = useStyles();
     const {Groupes}= useContext(DataContext);
 
-    const GetParameters = () => {};
+    const GetParameters = () => {
+      return (
+        <ButtonGroup color="primary" variant="text">
+          <Link to="/SettingsGroupe" style={{ textDecoration: "none" }}>
+           <Edit/>
+          </Link>
+          <Button>
+              <DeleteOutline/>
+            </Button>
+        </ButtonGroup>
+    )
+    };
     return (
         <div className= {classes.title}  > 
              <MaterialTable
                       columns={[
                         { title: 'Nom', field: 'nom' },
-                        { title: 'Membres', field: 'membre' },
+                        { title: 'Membres', field: 'nombre' },
                         {field:'Setup',title:'', render: ()=> GetParameters()},
                       ]}
                       title=""

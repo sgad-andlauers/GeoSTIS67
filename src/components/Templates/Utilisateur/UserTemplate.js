@@ -1,4 +1,4 @@
-import React , {useContext, forwardRef}from 'react';
+import React , {useContext, forwardRef, useState}from 'react';
 import { DataContext } from "../../../context/DataContext";
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, ButtonGroup, Fab}from '@material-ui/core';
@@ -21,12 +21,17 @@ import {
     ViewColumn,
     CheckCircle,
     Cancel,
-    Person,
-    MoreVert,
-    Add
+    Add,
+    RemoveCircle 
   } from "@material-ui/icons";
-  import {BiReset} from "react-icons/bi"
+  import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+import {RiUserSettingsFill, RiSettings3Fill} from "react-icons/ri"
 import MaterialTable, { MTableBodyRow } from "material-table";
+
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -61,45 +66,77 @@ const useStyles = makeStyles((theme) => ({
     ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
   };
-export default function DashBoard(props) {
+
+
+export default function UserTemplate(props) {
     const classes = useStyles();
-    const {dataUsers} = useContext(DataContext);
+    const {Users, setSelectedUser} = useContext(DataContext);
+
+    const handleSetSelectedRow =(evt, selectedRow)=>{
+      setSelectedUser(selectedRow);
+    };
     const GetParameters = () =>{
       return (
           <ButtonGroup color="primary" variant="text">
-            <Link to="/SettingsPassword" style={{ textDecoration: "none" }}>
-             <BiReset size = "24px"/>
+            <Button color="primary">
+            <Link to="/SettingsPassword" style={{ textDecoration: "none",}}>
+                <RiSettings3Fill size = "24px" />
             </Link>
-            <Button>
-              <MoreVert/>
             </Button>
-            <Link to="/SettingsProfils" style={{ textDecoration: "none" }}>
-             <Person/>
+            {/** suppression du profil */}
+            <Button>
+              <DeleteOutline color="secondary"/>
+            </Button>
+            {/* rendre le profil inActif*/}
+            <Button>
+              <RemoveCircle color="secondary"/>
+            </Button>
+            <Button color="primary">
+            <Link to="/SettingsProfils" style={{ textDecoration: "none"}}>
+                <RiUserSettingsFill size = "24px" />
             </Link>
+            </Button>
           </ButtonGroup>
       )
     }
+    const DateParses= (row)=>{
+      return(
+      <>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <KeyboardDatePicker
+          format="yyyy/MM/dd"
+          margin="normal"
+          id="date-picker-inline"
+          label="Date picker inline"
+          defaultValue={row.last_login}
+        />
+        </MuiPickersUtilsProvider>
+        </>
     
+      )}
     return (
         <div> 
             <MaterialTable
                 columns={[
                   {field: 'id', title: 'Id', width: 70},
-                  {field: 'Nom', title: 'Nom', width: 130},
-                  {field: 'Prenom', title: 'Prénom', width: 130},
-                  {field: 'Email', title: 'Email',width: 130},
-                  {field: 'LastLogin', title:'Dernière connexion', width: 70},
-                  {field: 'Status', title:'Statut', width: 70, render: (rowData)=> {return rowData.Status ==="actif"?(<CheckCircle style={{ color: '#03DA03'}}/>):(<Cancel style={{color: '#EB0404'}}/>)}},
-                  {field:'Setup',title:'', width: 130, render: ()=> GetParameters()},
+                  {field: 'lastName', title: 'Nom', width: 70},
+                  {field: 'firstName', title: 'Prénom', width: 130},
+                  {field: 'email', title: 'Email',width: 130},
+                  {field: 'last_login:', title:'Dernière connexion', width: 130, type: 'date', render: (row)=> {DateParses(row)}},
+                  {field: 'status', title:'Statut', width: 70, render: (rowData)=> {return rowData.status ===true?(<CheckCircle style={{ color: '#03DA03'}}/>):(<Cancel style={{color: '#EB0404'}}/>)}},
+                  {field:'Setup',title:'', width: 70, render: ()=> GetParameters()},
                 ]}
                 title="Liste des Utilisateurs"
                 icons={tableIcons}
-                data={dataUsers.default}
+                data={Users}
                 components={{
                     Row: (props) => {
                     return <MTableBodyRow {...props} className={classes.row} />;
                     }
                 }}
+                onRowClick={(evt, selectedRow) =>
+                  handleSetSelectedRow(evt, selectedRow)
+                }
             />
             <Link to="/AddProfils" style={{ textDecoration: "none" }}>
               <Fab color="primary" aria-label="addProfils" style={{marginLeft:"90%", marginTop:"1%"}}>

@@ -14,7 +14,7 @@ import { ReactComponent as SettingIcon } from "../logo/settings.svg";
 import {ReactComponent as Home} from "../logo/home.svg";
 
 
-export const mainListItems = (
+export const menuListItems = (
   <div>
     <Link to="/" style={{ textDecoration: "none" }}>
       <ListItem button>
