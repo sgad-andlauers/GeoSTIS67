@@ -1,5 +1,6 @@
-import React,{useContext, useState} from 'react';
+import React,{useContext, useState, useEffect} from 'react';
 import { DataContext } from "../../../context/DataContext";
+//import { PasswordContext } from "../../../context/GeneratedPassword";
 import {Button, Typography}from '@material-ui/core';
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -9,16 +10,18 @@ import {
 import{Autocomplete} from "@material-ui/lab";
 export default function AddUsers(props) {
     const {Groupes} = useContext(DataContext);
+    //const {generatedPassword}= useContext(PasswordContext);
     /** Gestion du post vers l'api */
+    const [password, setPassword]= useState("");
     const [addUsers, setAddUsers] = useState({
         nom:"",
         prenom:"",
         email:"",
         username:"",
-        password:"",
+        password: "",
         matricule:"",
     });
-
+    
     const handleChangeText = (e) =>{
         if(e.target.name === "nom") {
             addUsers.nom = e.target.value;
@@ -30,11 +33,39 @@ export default function AddUsers(props) {
             addUsers.email= e.target.value;
           }else if (e.target.name === "matricule"){
             addUsers.matricule = e.target.value;
-          }else if (e.target.name === "password"){
-            addUsers.password = e.target.value;
           }
           setAddUsers(addUsers);
     };
+    //generateur de mot de passe 
+    const onClickSetPassword =()=>{
+        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+        var string_length = 8;
+        var charCount = 0;
+        var numCount = 0;
+        var rnum;
+        var randomstring='';
+
+        for (var i=0; i<string_length; i++) {
+            if((Math.floor(Math.random() * 2) === 0) && numCount < 3 && charCount >= 5) {
+                rnum = Math.floor(Math.random() * 10);
+                randomstring += rnum;
+                numCount += 1;
+            } else {
+                rnum = Math.floor(Math.random() * chars.length);
+                randomstring += chars.substring(rnum,rnum+1);
+                charCount += 1;
+                
+            }
+        }
+        setPassword(randomstring);
+       
+    };
+    useEffect(() => {
+        addUsers.password= password;
+        setAddUsers(addUsers);
+    }, [addUsers])
+    console.log("user", addUsers);
+    // post request api
     const PostUser = async()=>{
         await axios.post("https://dev.geo.sdis67.com/api/v1/public/utilisateur", addUsers).then(res => {
             console.log("res", res);
@@ -139,16 +170,9 @@ export default function AddUsers(props) {
             />
             </Grid>
             <Grid item xs={12} >
-                <Typography variant="caption">A remplacer par la suite par un generateur de password </Typography>
-            <TextField
-                id="PWD"
-                name="password"
-                label="Mot de Passe"
-                type="password"
-                variant="outlined"
-                fullWidth
-                onChange={(e)=>{handleChangeText(e)}}
-            />
+                <Button color="primary" name="password"  id="password" onClick={onClickSetPassword} >
+                       Générer le password
+                </Button>
             </Grid>
              <Grid item xs={12} sm={6}>
                 <Link to="/Utilisateurs" style={{ textDecoration: "none" }}>

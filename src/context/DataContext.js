@@ -18,7 +18,6 @@ export default function DataContextProvider(props) {
   const [tableCommune, setTableCommune] = useState(null);
   const [Groupes, setGroupes] = useState([]);
   const [permissionsDjango, setPermissinsDjango] = useState(null);
-  const [selectedRow, setSelectedRow] = useState(null);
   const [Users, setUsers] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
 
