@@ -68,53 +68,57 @@ export const Fonctions =
 [
     {
         id:1,
+        label:"non définit"
+    },
+    {
+        id:2,
         label:"Responsable"
     },
     {
-        id: 2,
+        id: 3,
         label:"Gestionnaire"
     },
     {
-        id:3,
+        id:4,
         label:"Membre"
     }
 ];
 export const Cie = 
 [
     {
-        nom: "CIE Bruche/Mossig",
-        idTable: 134000
+        lastName: "CIE Bruche/Mossig",
+        id: 134000
     },
     { 
-        nom: "CIE Piemont/Ried",
-        idTable: 134001
+        lastName: "CIE Piemont/Ried",
+        id: 134001
     },
     {
-        nom: "CIE Sud EMS",
-        idTable: 134002
+        lastName: "CIE Sud EMS",
+        id: 134002
     },
     {
-        nom: "CIE Centre EMS",
-        idTable: 134003
+        lastName: "CIE Centre EMS",
+        id: 134003
     },
     {
-        nom: "CIE Nord EMS",
-        idTable: 134004
+        lastName: "CIE Nord EMS",
+        id: 134004
     },
     {
-        nom: "CIE Lauter/Moder",
-        idTable: 134005
+        lastName: "CIE Lauter/Moder",
+        id: 134005
     },
     {
-        nom: "CIE Sarre/Zorn",
-        idTable: 134006
+        lastName: "CIE Sarre/Zorn",
+        id: 134006
     }
 ];
 export const Champs = 
 [
     {
         id:1,
-        champ: "Nom",
+        champ: "lastName",
         id_app: 3
     },
     {
@@ -217,56 +221,68 @@ export const Users =
 [
     {
         id: 1,
-        nom:"Petit",
-        prenom:"Patrice",
+        lastName: "Petit",
+        firstName: "Patrice",
         email:"patrice.petit@sdis67.com",
-        lastLogin:"21-06-2021",
-        status:"actif",
+        last_login:"21-06-2021",
+        status:true,
+        userName: "01000",
+        matricule: 11000,
         fonction: 1
     },
     {
         id: 2,
-        nom:"Dupin",
-        prenom:"Maxime",
+        lastName:"Dupin",
+        firstName:"Maxime",
         email:"maxime.dupin@sdis67.com",
         lastLogin:"21-06-2021",
-        status:"actif",
+        userName: "02000",
+        matricule: 12000,
+        status:true,
         fonction: 1
     },
     {
         id:3,
-        nom:"Huck",
-        prenom:"Alain",
+        lastName:"Huck",
+        firstName:"Alain",
         email:"alain.huck@sdis67.com",
         lastLogin:"21-06-2021",
-        status:"actif",
-        fonction: 2
+        userName: "03000",
+        matricule: 13000,
+        status:true,
+        fonction: 1
     },
     {
         id:4,
-        nom:"Colobert",
-        prenom:"Mathieu",
+        lastName:"Colobert",
+        firstName:"Mathieu",
         email:"mathieu.colobert@sdis67.com",
         lastLogin:"21-06-2021",
-        status:"inactif",
-        fonction: 2
+        userName: "04000",
+        matricule: 14000,
+        status:false,
+        fonction: 1
     },
     {
         id:5,
-        nom:"Ratelli",
-        prenom:"Luc",
+        lastName:"Ratelli",
+        firstName:"Luc",
         email:"luc.ratelli@sdis67.com",
         lastLogin:"21-06-2021",
-        status:"actif",
-        fonction: 3
+        userName: "05000",
+        matricule: 15000,
+        status:true,
+        fonction: 1
     },
     {
         id:6,
-        nom:"Andlauer",
-        prenom:"Sébastien",
+        lastName:"Andlauer",
+        firstName:"Sébastien",
         email:"sebastien.andlauer@sdis67.com",
         lastLogin:"21-06-2021",
-        status:"actif",
-        fonction: 3
+        userName: "06000",
+        matricule: 16000,
+        status:true,
+        fonction: 1
     }
 ]

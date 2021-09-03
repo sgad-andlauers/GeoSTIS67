@@ -1,4 +1,4 @@
-import React, {useState, useContext,forwardRef, useMemo}  from 'react';
+import React, {useState, useContext,forwardRef}  from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -19,8 +19,9 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Accordion from '@material-ui/core/Accordion';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import InputLabel from '@material-ui/core/InputLabel';
 import Switch from '@material-ui/core/Switch';
-import _ from 'lodash';
+//import _ from 'lodash';
 import {
   AddBox,
   ArrowDownward,
@@ -94,31 +95,28 @@ function GetStepContent(stepIndex) {
   const [value, setValue] = useState(0); 
   const [choixZone, setChoixZone] = useState([]);
   const [getZone, setGetZone] = useState('');
-  const [getNature, setGetNature] = useState('');
-  const [getRole, setGetRole] = useState([{
-    id_role:null,
-    id_app:null,
-  }]);
   const [getFonctions, setGetFonctions] = useState([
-    {id_fonction:null,
-      role:getRole
-    }
+    {fonction:"",
+    role:"",
+    id_app:null,}
   ]);
   const [getUserInGroup, setUserInGroup]= useState([{
     id_user:null,
     id_fonction:null
   }]);
   const [saveAddGroup, setSaveAddGroup] = useState({
-    nom:" cis Altorf",
+    nom:"",
     description:"",
-    parentId:6,
-    nature:getNature,
+    parentId:null,
+    nature:"",
     zone:null,
     fonction:getFonctions,
     user:getUserInGroup
   });
+
   const useForceUpdate = function() {
     setValue((value) => value + 1); // update the state to force render
+    console.warn("Force update", value);
   };
   const groupRecursive = function(id, niveau) {
     let recursiveLevel = Groupes.filter(d=> d.id === id);
@@ -135,7 +133,7 @@ function GetStepContent(stepIndex) {
               id={`Responsable${niveau+1}`}
               options={Roles}
               name="permissionGroupResponsable"
-              style={{width:"40%", marginLeft:"50px", marginTop:"2px"}}
+              style={{width:"55%", marginLeft:"53px", marginTop:"2px"}}
               getOptionLabel={(option) => option.label}
               renderInput={(params) => 
                   <TextField {...params} label="Rôles" variant="outlined" />}
@@ -146,7 +144,7 @@ function GetStepContent(stepIndex) {
               id={`Gestionnaire${niveau+1}`}
               options={Roles}
               name="permissionGroupGestionnaire"
-              style={{width:"40%",marginLeft:"32px", marginTop:"2px"}}
+              style={{width:"55%",marginLeft:"35px", marginTop:"2px"}}
               getOptionLabel={(option) => option.label}
               renderInput={(params) => 
                 <TextField {...params} label="Rôles" variant="outlined" />}
@@ -157,7 +155,7 @@ function GetStepContent(stepIndex) {
               id={`Membres${niveau+1}`}
               options={Roles}
               name="permissionGroupMembre"
-              style={{width:"40%", marginTop:"2px"}}
+              style={{width:"55%", marginTop:"2px"}}
               getOptionLabel={(option) => option.label}
               renderInput={(params) => 
                 <TextField {...params} label="Rôles" variant="outlined" />}
@@ -172,7 +170,6 @@ function GetStepContent(stepIndex) {
   const groupStatics = function(id, niveau){
     let diferentLevel = Groupes.filter(d => d.id === id);
     let marginLeft = 24 * niveau;
-    console.warn("diferentLevel", diferentLevel);
     return(
       <>
       <Grid item xs={3}style={{marginTop:"2px"}}>
@@ -183,7 +180,7 @@ function GetStepContent(stepIndex) {
           id={`Responsable${niveau}`}
           options={Roles}
           name="permissionGroupResponsable"
-          style={{width:"40%", marginLeft:"50px"}}
+          style={{width:"55%", marginLeft:"53px"}}
           getOptionLabel={(option) => option.label}
           renderInput={(params) => 
               <TextField {...params} label="Rôles" variant="outlined" />}
@@ -194,7 +191,7 @@ function GetStepContent(stepIndex) {
           id={`Gestionnaire${niveau}`}
           options={Roles}
           name="permissionGroupGestionnaire"
-          style={{width:"40%", marginLeft:"34px"}}
+          style={{width:"55%", marginLeft:"35px"}}
           getOptionLabel={(option) => option.label}
           renderInput={(params) => 
             <TextField {...params} label="Rôles" variant="outlined" />}
@@ -205,7 +202,7 @@ function GetStepContent(stepIndex) {
           id={`Membres${niveau}`}
           options={Roles}
           name="permissionGroupMembre"
-          style={{width:"40%"}}
+          style={{width:"55%"}}
           getOptionLabel={(option) => option.label}
           renderInput={(params) => 
             <TextField {...params} label="Rôles" variant="outlined" />}
@@ -221,7 +218,7 @@ function GetStepContent(stepIndex) {
               id={`Responsable${niveau+1}`}
               options={Roles}
               name="permissionGroupResponsable"
-              style={{width:"40%", marginLeft:"50px", marginTop:"2px"}}
+              style={{width:"55%", marginLeft:"53px", marginTop:"2px"}}
               getOptionLabel={(option) => option.label}
               renderInput={(params) => 
                   <TextField {...params} label="Rôles" variant="outlined" />}
@@ -232,7 +229,7 @@ function GetStepContent(stepIndex) {
               id={`Gestionnaire${niveau+1}`}
               options={Roles}
               name="permissionGroupGestionnaire"
-              style={{width:"40%",marginLeft:"32px", marginTop:"2px"}}
+              style={{width:"55%",marginLeft:"35px", marginTop:"2px"}}
               getOptionLabel={(option) => option.label}
               renderInput={(params) => 
                 <TextField {...params} label="Rôles" variant="outlined" />}
@@ -243,7 +240,7 @@ function GetStepContent(stepIndex) {
               id={`Membres${niveau+1}`}
               options={Roles}
               name="permissionGroupMembre"
-              style={{width:"40%", marginTop:"2px"}}
+              style={{width:"55%", marginTop:"2px"}}
               getOptionLabel={(option) => option.label}
               renderInput={(params) => 
                 <TextField {...params} label="Rôles" variant="outlined" />}
@@ -256,9 +253,25 @@ function GetStepContent(stepIndex) {
     )
     
   }
-  /**---------------- function for first step ------------------*/
+  /**---------------- fonctionalitées qui interfaire avec la premiere etape------------------*/
   const handleChange = (event) => {
     setCheckGroupLeader(event.target.checked);
+  };
+  const handleChangeGroupe= (e) => {
+    let change = {...saveAddGroup};
+    if(e.target.name === "nom") {
+        change.nom = e.target.value;
+      }else if (e.target.name === "description"){
+        change.description = e.target.value;
+      }else if(e.target.name === "nature") {
+        change.nature = e.target.value;
+      }
+      setSaveAddGroup(change);
+  };
+  const handleChangeParentId =(e, value, reason) => {
+    console.log("addParentId");
+    setSaveAddGroup({...saveAddGroup, parentId: value.id})
+
   };
   /**---------------- function for second step ---------------- */
   const handleChangeCodeName = (d) => {
@@ -270,9 +283,23 @@ function GetStepContent(stepIndex) {
   const isChecked = (d) => {
     return d.checked;
   };
+  const handleChangePermGroupe =(e, value, reason, d) => {
+    console.log("addPermOnGroupe");
+    console.log("event", e.target.id);
+    console.log("value", value);
+    console.log("d", d.id)
+    let change = {...getFonctions};
+    if(e.target.id === "permissionGroupResponsable/app 1-option-0"){
+      getFonctions.fonction="Responsable";
+      getFonctions.role= value.label;
+      getFonctions.id_app= 1;
+    }
+    setGetFonctions(getFonctions);
+    //setSaveAddGroup({...saveAddGroup, parentId: value.id})
 
+  }
 
-  /**---------------- function for third step ---------------*/
+  /**---------------- Recuperation du tableau de zone selon ça nature ---------------*/
   const handleChangeZone = (e)=>{
     setGetZone(e.target.value);
     if (e.target.value === "Cie"){
@@ -281,7 +308,11 @@ function GetStepContent(stepIndex) {
       setChoixZone(tableCommune);
     }
   }; 
-  /**---------------- function for four step --------------- */
+  const handleChangeZoneGroupe = (e, value, reason)=>{
+    console.log("value", value);
+    setSaveAddGroup({...saveAddGroup, zone:value.id})
+  }
+  /**---------------- initialisation du lookup pour la fonction de l'utilisateur dans le groupe --------------- */
   const convertArrayToObject = (array, key) => {
     const initialValue = {};
     return array.reduce((obj, item) => {
@@ -293,23 +324,28 @@ function GetStepContent(stepIndex) {
   };
   const lookup = convertArrayToObject(Fonctions,'id');
 
+
+  console.log("saveAddGroup", saveAddGroup);
   switch (stepIndex) {
     case 0:
       return (
           <Container maxWidth="sm">
             <form  noValidate autoComplete="off">
-                <TextField id="name" label="Nom du groupe" variant="outlined" name="name" fullWidth/>
-                <TextField id="Descriptif" label="Description" multiline name="description" fullWidth variant="outlined" style={{marginTop:"2px"}}/>
+                <TextField id="name" label="Nom du groupe" variant="outlined" name="nom" fullWidth required error={saveAddGroup.nom ===""} onChange={(e)=>{handleChangeGroupe(e)}}/>
+                <TextField id="Descriptif" label="Description" multiline name="description" fullWidth variant="outlined" style={{marginTop:"5px"}} onChange={(e)=>{handleChangeGroupe(e)}}/>
+                <InputLabel id="nature-du-groupe">Nature du groupe</InputLabel>
                 <Select
+                required
+                error={saveAddGroup.nature===""}
                 labelId="SelectNature"
+                name="nature"
                 id="SelectNature"
-                value={getNature}
-                onChange={handleChangeZone}
-                label="Nature"
-                placeholder="Nature du groupe"
+                onChange={(e)=>{handleChangeGroupe(e)}}
+                value={saveAddGroup.nature}
+                label="Nature du groupe"
                 fullWidth
                 variant="outlined"
-                style={{marginTop:"2px"}}
+                style={{marginTop:"5px"}}
             >
                 <MenuItem value={null}>
                     <em>None</em>
@@ -331,8 +367,9 @@ function GetStepContent(stepIndex) {
                             id="GroupLeader"
                             options={Groupes}
                             name="parentId"
+                            onChange={(e, value, reason)=>{handleChangeParentId(e, value, reason)}}
                             getOptionLabel={(option) => option.nom}
-                            style={{ width: 520, marginTop: "14px" }}
+                            style={{ width: 520, marginTop: "18px" }}
                             renderInput={(params) => 
                             <TextField {...params} label="Groupe Parent" variant="outlined" />}
                         />
@@ -374,7 +411,7 @@ function GetStepContent(stepIndex) {
                               <Grid item xs={12}>
                                   {Fonctions && Fonctions.map((data)=>{return(
                                     <>
-                                      <Typography variant="caption" style={{marginLeft:"25px"}}>{data.label}</Typography>
+                                      <Typography variant="caption" style={{marginLeft:"62px"}}>{data.id===1?false:data.label}</Typography>
                                     </>
                                   )})}
                               </Grid>
@@ -383,10 +420,11 @@ function GetStepContent(stepIndex) {
                               </Grid>
                                 <Grid item xs={3} >
                                   <Autocomplete
-                                      id={d.id}
+                                      id={`permissionGroupResponsable/app ${d.id}`}
                                       options={Roles}
                                       name="permissionGroupResponsable"
-                                      style={{width:"40%", marginLeft:"5px"}}
+                                      onChange={(e, value, reason, d)=>handleChangePermGroupe(e, value, reason, d)}
+                                      style={{width:"55%", marginLeft:"50px"}}
                                       getOptionLabel={(option) => option.label}
                                       renderInput={(params) => 
                                       <TextField {...params} label="Rôles" variant="outlined" />}
@@ -394,10 +432,11 @@ function GetStepContent(stepIndex) {
                                 </Grid>
                                 <Grid item xs={3} >
                                   <Autocomplete
-                                      id={d.id}
+                                      id={`permissionGroupGestionnaire/app ${d.id}`}
                                       options={Roles}
                                       name="permissionGroupGestionnaire"
-                                      style={{width:"40%", marginLeft:"27px"}}
+                                      onChange={(e, value, reason)=>handleChangePermGroupe(e, value, reason)}
+                                      style={{width:"55%", marginLeft:"30px"}}
                                       getOptionLabel={(option) => option.label}
                                       renderInput={(params) => 
                                       <TextField {...params} label="Rôles" variant="outlined" />}
@@ -405,10 +444,11 @@ function GetStepContent(stepIndex) {
                                 </Grid>
                                 <Grid item xs={3} >
                                   <Autocomplete
-                                      id={d.id}
+                                      id={`permissionGroupMembre/app ${d.id}`}
                                       options={Roles}
                                       name="permissionGroupMembre"
-                                      style={{width:"40%", marginLeft:"40px"}}
+                                      onChange={(e, value, reason)=>handleChangePermGroupe(e, value, reason)}
+                                      style={{width:"55%", marginLeft:"4px"}}
                                       getOptionLabel={(option) => option.label}
                                       renderInput={(params) => 
                                       <TextField {...params} label="Rôles" variant="outlined" />}
@@ -422,7 +462,7 @@ function GetStepContent(stepIndex) {
                               <Grid item xs={12}>
                                   {Fonctions && Fonctions.map((data)=>{return(
                                     <>
-                                      <Typography variant="caption" style={{marginLeft:"120px" }}>{data.label}</Typography>
+                                      <Typography variant="caption" style={{marginLeft:"64px" }}>{data.id===1?false:data.label}</Typography>
                                     </>
                                   )})}
                                 </Grid>
@@ -469,6 +509,7 @@ function GetStepContent(stepIndex) {
                 id="choixZone"
                 options={choixZone}
                 multiple
+                onChange={(e, value, reason)=>handleChangeZoneGroupe(e, value, reason)}
                 getOptionLabel={(option) => option.nom}
                 style={{ marginTop: "6px" }}
                 fullWidth
@@ -482,7 +523,12 @@ function GetStepContent(stepIndex) {
           columns={[
             {
               title: "Nom",
-              field: "nom",
+              field: "lastName",
+              editable: 'never'
+            },
+            {
+              title: "Prénom",
+              field: "firstName",
               editable: 'never'
             },
             {
@@ -509,7 +555,13 @@ function GetStepContent(stepIndex) {
           }}
           options={{
             selection: true
+
           }}
+          components={{
+            Row: (props) => {
+            return <MTableBodyRow {...props} className={classes.row} />;
+            }
+        }}
         />
         )
     default:
@@ -563,7 +615,7 @@ export default function HorizontalLabelPositionBelowStepper() {
                 Précedent
               </Button>
               <Button variant="contained" color="primary" onClick={handleNext}>
-                {activeStep === steps.length - 1 ? 'Fin' : 'Suivant'}
+                {activeStep === steps.length - 1 ? 'Sauvegarder' : 'Suivant'}
               </Button>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React , {useContext, forwardRef, useState}from 'react';
+import React , {useContext, forwardRef}from 'react';
 import { DataContext } from "../../../context/DataContext";
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, ButtonGroup, Fab}from '@material-ui/core';
@@ -24,11 +24,6 @@ import {
     Add,
     RemoveCircle 
   } from "@material-ui/icons";
-  import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
 import {RiUserSettingsFill, RiSettings3Fill} from "react-icons/ri"
 import MaterialTable, { MTableBodyRow } from "material-table";
 
@@ -99,21 +94,6 @@ export default function UserTemplate(props) {
           </ButtonGroup>
       )
     }
-    const DateParses= (row)=>{
-      return(
-      <>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <KeyboardDatePicker
-          format="yyyy/MM/dd"
-          margin="normal"
-          id="date-picker-inline"
-          label="Date picker inline"
-          defaultValue={row.last_login}
-        />
-        </MuiPickersUtilsProvider>
-        </>
-    
-      )}
     return (
         <div> 
             <MaterialTable
@@ -122,7 +102,7 @@ export default function UserTemplate(props) {
                   {field: 'lastName', title: 'Nom', width: 70},
                   {field: 'firstName', title: 'Prénom', width: 130},
                   {field: 'email', title: 'Email',width: 130},
-                  {field: 'last_login:', title:'Dernière connexion', width: 130, type: 'date', render: (row)=> {DateParses(row)}},
+                  {field: 'last_login', title:'Dernière connexion', width: 130},
                   {field: 'status', title:'Statut', width: 70, render: (rowData)=> {return rowData.status ===true?(<CheckCircle style={{ color: '#03DA03'}}/>):(<Cancel style={{color: '#EB0404'}}/>)}},
                   {field:'Setup',title:'', width: 70, render: ()=> GetParameters()},
                 ]}
@@ -137,6 +117,9 @@ export default function UserTemplate(props) {
                 onRowClick={(evt, selectedRow) =>
                   handleSetSelectedRow(evt, selectedRow)
                 }
+                options={{
+                  selection:true
+                }}
             />
             <Link to="/AddProfils" style={{ textDecoration: "none" }}>
               <Fab color="primary" aria-label="addProfils" style={{marginLeft:"90%", marginTop:"1%"}}>
